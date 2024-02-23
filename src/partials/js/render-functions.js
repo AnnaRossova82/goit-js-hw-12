@@ -32,4 +32,7 @@ export function displayImages(images, galleryContainer, lightbox) {
       lightbox.refresh();
       loadMoreBtn.style.display = 'block';
     });
-  }
+}
+  
+import { loadMoreBtn } from '/main.js';
+

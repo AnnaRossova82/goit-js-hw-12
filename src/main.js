@@ -69,3 +69,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 });
+
+export const loadMoreBtn = document.getElementById('loadMore');
+
