@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', function () {
         await fetchAndDisplayImages();
     });
 
-    loadMoreBtn = document.getElementById('loadMore'); // Assign loadMoreBtn after DOMContentLoaded
+    loadMoreBtn = document.getElementById('loadMore'); 
+    loadMoreBtn.insertAdjacentElement('afterend', loader);
 
     loadMoreBtn.addEventListener('click', async function () {
         loader.style.display = 'block';

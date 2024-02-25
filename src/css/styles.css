@@ -62,19 +62,19 @@ button {
 
 
 
-.loader {
+#loader {
+  display: none;
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  display: inline-block;
   position: relative;
   border: 3px solid;
   border-color: #FFF #FFF transparent transparent;
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-.loader::after,
-.loader::before {
+#loader::after,
+#loader::before {
   content: '';  
   box-sizing: border-box;
   position: absolute;
@@ -92,7 +92,8 @@ button {
   animation: rotationBack 0.5s linear infinite;
   transform-origin: center center;
 }
-.loader::before {
+#loader::before {
+  
   width: 32px;
   height: 32px;
   border-color: #FFF #FFF transparent transparent;
@@ -100,6 +101,7 @@ button {
 }
     
 @keyframes rotation {
+
   0% {
     transform: rotate(0deg);
   }
@@ -108,6 +110,7 @@ button {
   }
 } 
 @keyframes rotationBack {
+
   0% {
     transform: rotate(0deg);
   }
@@ -118,4 +121,19 @@ button {
     
 #loadMore {
   display: none;
+    width: 150px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 16px auto; 
 }
+
+#loadMore:hover {
+    background-color: #2980b9;
+}
+  
