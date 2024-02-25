@@ -5,6 +5,7 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './partials/js/pixabay-api.js';
 import { displayImages } from './partials/js/render-functions.js';
 
+
 document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
@@ -13,10 +14,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const lightbox = new SimpleLightbox('.gallery-container a');
 
+
     let currentPage = 1;
     let currentSearchTerm = '';
     const perPage = 15;
-    let loadMoreBtn; // Declare loadMoreBtn outside the event listeners
+    let loadMoreBtn; 
 
     searchForm.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -40,6 +42,8 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchAndDisplayImages() {
         try {
             const data = await fetchImages(currentSearchTerm, currentPage, perPage);
+            console.log('Total Hits:', data.totalHits);
+
             loader.style.display = 'none';
 
             if (data.hits.length > 0) {
@@ -48,15 +52,26 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadMoreBtn.style.display = 'block';
                 }
                 currentPage++;
+           
+                const cardHeight = document.querySelector('.card').getBoundingClientRect().height;
+              
+                window.scrollBy({
+                    top: 2 * cardHeight,
+                    behavior: 'smooth',
+                });
             } else {
                 if (loadMoreBtn) {
                     loadMoreBtn.style.display = 'none';
                 }
-                iziToast.info({
-                    title: 'Info',
-                    message: 'We\'re sorry, but you\'ve reached the end of search results.',
-                    position: 'topCenter',
-                });
+                const totalHits = data.totalHits || 0;
+
+                if (currentPage * perPage >= totalHits) {
+                    iziToast.info({
+                        title: 'Info',
+                        message: 'You have reached the end of search results.',
+                        position: 'topCenter',
+                    });
+                }
             }
         } catch (error) {
             loader.style.display = 'none';
