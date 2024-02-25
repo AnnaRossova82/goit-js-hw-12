@@ -4,37 +4,37 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './partials/js/pixabay-api.js';
 import { displayImages } from './partials/js/render-functions.js';
+import { Spinner } from 'spin.js';
 
 document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
     const galleryContainer = document.getElementById('gallery');
     const loader = document.getElementById('loader');
+    const loadMoreBtn = document.getElementById('loadMore');  
 
     const lightbox = new SimpleLightbox('.gallery-container a');
+    const spinner = new Spinner();  
+    spinner.spin(loader);
+
 
     let currentPage = 1;
     let currentSearchTerm = '';
     const perPage = 15;
-    let loadMoreBtn; 
 
     searchForm.addEventListener('submit', async function (e) {
         e.preventDefault();
         currentSearchTerm = searchInput.value.trim();
         galleryContainer.innerHTML = '';
-        loader.style.display = 'block';
-        if (loadMoreBtn) {
-            loadMoreBtn.style.display = 'none';
-        }
+        startSpinner();
+        loadMoreBtn.style.display = 'none';
         currentPage = 1;
         await fetchAndDisplayImages();
     });
 
-    loadMoreBtn = document.getElementById('loadMore'); 
-
     loadMoreBtn.addEventListener('click', async function () {
-        loader.style.display = 'block';
-        loadMoreBtn.style.display = 'none'; 
+        startSpinner();
+        loadMoreBtn.style.display = 'none';
         await fetchAndDisplayImages();
     });
 
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const data = await fetchImages(currentSearchTerm, currentPage, perPage);
 
-            loader.style.display = 'none';
+            stopSpinner();
 
             if (data.hits.length > 0) {
                 displayImages(data.hits, galleryContainer, lightbox);
@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         position: 'topCenter',
                     });
                 } else {
-                    loadMoreBtn.style.display = 'block'; 
+                    loadMoreBtn.style.display = 'block';
                 }
             }
         } catch (error) {
-            loader.style.display = 'none';
+            stopSpinner();
             console.error('Error fetching images:', error);
             iziToast.error({
                 title: 'Error',
@@ -84,6 +84,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 position: 'topCenter',
             });
         }
+    }
+
+    function startSpinner() {
+        spinner.spin(loader);
+    }
+
+    function stopSpinner() {
+        spinner.stop();
     }
 });
 

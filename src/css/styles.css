@@ -62,7 +62,7 @@ button {
 
 
 
-#loader {
+.spinner {
   display: none;
   width: 48px;
   height: 48px;
@@ -72,8 +72,8 @@ button {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-#loader::after,
-#loader::before {
+.spinner::after,
+.spinner::before {
   content: '';  
   box-sizing: border-box;
   position: absolute;
@@ -91,7 +91,7 @@ button {
   animation: rotationBack 0.5s linear infinite;
   transform-origin: center center;
 }
-#loader::before {
+.spinner::before {
   
   width: 32px;
   height: 32px;
