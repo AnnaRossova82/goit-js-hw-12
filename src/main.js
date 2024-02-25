@@ -5,7 +5,6 @@ import "simplelightbox/dist/simple-lightbox.min.css";
 import { fetchImages } from './partials/js/pixabay-api.js';
 import { displayImages } from './partials/js/render-functions.js';
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
@@ -13,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
     const loader = document.getElementById('loader');
 
     const lightbox = new SimpleLightbox('.gallery-container a');
-
 
     let currentPage = 1;
     let currentSearchTerm = '';
@@ -33,37 +31,38 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     loadMoreBtn = document.getElementById('loadMore'); 
-    loadMoreBtn.insertAdjacentElement('afterend', loader);
 
     loadMoreBtn.addEventListener('click', async function () {
         loader.style.display = 'block';
+        loadMoreBtn.style.display = 'none'; 
         await fetchAndDisplayImages();
     });
 
     async function fetchAndDisplayImages() {
         try {
             const data = await fetchImages(currentSearchTerm, currentPage, perPage);
-            console.log('Total Hits:', data.totalHits);
 
             loader.style.display = 'none';
 
             if (data.hits.length > 0) {
                 displayImages(data.hits, galleryContainer, lightbox);
-                if (currentPage === 1 && loadMoreBtn) {
+
+                if (currentPage === 1) {
                     loadMoreBtn.style.display = 'block';
                 }
                 currentPage++;
-           
+
                 const cardHeight = document.querySelector('.card').getBoundingClientRect().height;
-              
+
                 window.scrollBy({
                     top: 2 * cardHeight,
                     behavior: 'smooth',
                 });
             } else {
-                if (loadMoreBtn) {
+                if (currentPage === 1) {
                     loadMoreBtn.style.display = 'none';
                 }
+
                 const totalHits = data.totalHits || 0;
 
                 if (currentPage * perPage >= totalHits) {
@@ -72,6 +71,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         message: 'You have reached the end of search results.',
                         position: 'topCenter',
                     });
+                } else {
+                    loadMoreBtn.style.display = 'block'; 
                 }
             }
         } catch (error) {
@@ -87,4 +88,3 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 export const loadMoreBtn = document.getElementById('loadMore');
-
