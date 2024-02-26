@@ -76,18 +76,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     top: 2 * cardHeight,
                     behavior: 'smooth',
                 });
-            } else{
+            } else {
                 const totalHits = data.totalHits || 0;
                 const lastPage = Math.ceil(totalHits / perPage);
-        
-                if (currentPage >= lastPage) {
-                    loadMoreBtn.style.display = 'none';
-                    iziToast.info({
+
+                if (currentPage === lastPage) {
+                      loadMoreBtn.style.display = 'none';
+
+                      iziToast.info({
                         title: 'Info',
                         message: 'You have reached the end of search results.',
                         position: 'topCenter',
                     });
-                } 
+                } else {
+                        loadMoreBtn.style.display = 'block';
+                }
             }
         } catch (error) {
             stopSpinner();
