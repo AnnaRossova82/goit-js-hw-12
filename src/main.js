@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchForm = document.getElementById('searchForm');
     const searchInput = document.getElementById('searchInput');
     const galleryContainer = document.getElementById('gallery');
-    const loader = document.getElementById('loader');
+
     const loadMoreBtn = document.getElementById('loadMore');  
 
     const lightbox = new SimpleLightbox('.gallery-container a');
