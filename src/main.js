@@ -14,8 +14,30 @@ document.addEventListener('DOMContentLoaded', function () {
     const loadMoreBtn = document.getElementById('loadMore');  
 
     const lightbox = new SimpleLightbox('.gallery-container a');
-    const spinner = new Spinner();  
-    spinner.spin(loader);
+    
+  const opts = {
+        lines: 13, 
+        length: 38, 
+        width: 17, 
+        radius: 45, 
+        scale: 1, 
+        corners: 1, 
+        speed: 1, 
+        rotate: 0, 
+        animation: 'spinner-line-fade-quick', 
+        direction: 1, 
+        color: '#16ca34', 
+        fadeColor: 'transparent', 
+        top: '50%', 
+        left: '50%', 
+        shadow: '0 0 1px transparent', 
+        zIndex: 2000000000, 
+        className: 'spinner', 
+        position: 'absolute', 
+      };
+      
+   const target = document.getElementById('loader');
+   const spinner = new Spinner(opts);
 
 
     let currentPage = 1;
@@ -24,9 +46,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     searchForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        spinner.spin(target);
         currentSearchTerm = searchInput.value.trim();
         galleryContainer.innerHTML = '';
-        startSpinner();
         loadMoreBtn.style.display = 'none';
         currentPage = 1;
         await fetchAndDisplayImages();
@@ -41,7 +63,6 @@ document.addEventListener('DOMContentLoaded', function () {
     async function fetchAndDisplayImages() {
         try {
             const data = await fetchImages(currentSearchTerm, currentPage, perPage);
-
             stopSpinner();
 
             if (data.hits.length > 0) {
@@ -51,9 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadMoreBtn.style.display = 'block';
                 }
                 currentPage++;
-
                 const cardHeight = document.querySelector('.card').getBoundingClientRect().height;
-
                 window.scrollBy({
                     top: 2 * cardHeight,
                     behavior: 'smooth',
@@ -71,6 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         message: 'You have reached the end of search results.',
                         position: 'topCenter',
                     });
+                    loadMoreBtn.style.display = 'none';
                 } else {
                     loadMoreBtn.style.display = 'block';
                 }
