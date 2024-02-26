@@ -62,36 +62,32 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             const data = await fetchImages(currentSearchTerm, currentPage, perPage);
             stopSpinner();
-
+    
             if (data.hits.length > 0) {
                 displayImages(data.hits, galleryContainer, lightbox);
-
+    
                 if (currentPage === 1) {
                     loadMoreBtn.style.display = 'block';
                 }
                 currentPage++;
+    
                 const cardHeight = document.querySelector('.card').getBoundingClientRect().height;
                 window.scrollBy({
                     top: 2 * cardHeight,
                     behavior: 'smooth',
                 });
-            } else {
-                if (currentPage === 1) {
-                    loadMoreBtn.style.display = 'none';
-                }
-
+            } else{
                 const totalHits = data.totalHits || 0;
-
-                if (currentPage * perPage >= totalHits) {
+                const lastPage = Math.ceil(totalHits / perPage);
+        
+                if (currentPage >= lastPage) {
+                    loadMoreBtn.style.display = 'none';
                     iziToast.info({
                         title: 'Info',
                         message: 'You have reached the end of search results.',
                         position: 'topCenter',
                     });
-                    loadMoreBtn.style.display = 'none';
-                } else {
-                    loadMoreBtn.style.display = 'block';
-                }
+                } 
             }
         } catch (error) {
             stopSpinner();
@@ -103,7 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         }
     }
-
+  
     function startSpinner() {
         spinner.spin(loader);
     }
